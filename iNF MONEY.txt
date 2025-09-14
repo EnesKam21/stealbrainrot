@@ -1,0 +1,160 @@
+-- ⚡ Kam Premium Menu v3
+-- Key: kameneskam
+-- GetKey Link: https://link-hub.net/1349121/bSm4iG9FbEZl
+
+local keyRequired = "kameneskam"
+local getKeyLink = "https://link-hub.net/1349121/bSm4iG9FbEZl"
+
+local uis = game:GetService("UserInputService")
+local rs = game:GetService("RunService")
+local plr = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", plr:WaitForChild("PlayerGui"))
+gui.Name = "KamPremiumMenu"
+gui.ResetOnSpawn = false
+
+--// MAIN MENU
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.Size = UDim2.new(0, 350, 0, 250)
+mainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Visible = false
+
+-- Title
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 35)
+title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+title.Text = "⚡ Kam Premium Menu v3"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 22
+
+-- Money Button
+local moneyBtn = Instance.new("TextButton", mainFrame)
+moneyBtn.Size = UDim2.new(1, -20, 0, 40)
+moneyBtn.Position = UDim2.new(0, 10, 0, 50)
+moneyBtn.Text = "💰 Infinite Money"
+moneyBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+moneyBtn.TextColor3 = Color3.new(1, 1, 1)
+moneyBtn.Font = Enum.Font.GothamBold
+moneyBtn.TextSize = 18
+
+moneyBtn.MouseButton1Click:Connect(function()
+    local Event = game:GetService("ReplicatedStorage").ItemBuy
+    Event:FireServer("Grapple Hook", -99999999999999999999)
+end)
+
+-- Mobile Option Toggle
+local mobileToggle = Instance.new("TextButton", mainFrame)
+mobileToggle.Size = UDim2.new(1, -20, 0, 40)
+mobileToggle.Position = UDim2.new(0, 10, 0, 100)
+mobileToggle.Text = "📱 Mobile Option: ON"
+mobileToggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mobileToggle.TextColor3 = Color3.new(1, 1, 1)
+mobileToggle.Font = Enum.Font.GothamBold
+mobileToggle.TextSize = 18
+
+local mobileEnabled = true
+mobileToggle.MouseButton1Click:Connect(function()
+    mobileEnabled = not mobileEnabled
+    if mobileEnabled then
+        mobileToggle.Text = "📱 Mobile Option: ON"
+    else
+        mobileToggle.Text = "📱 Mobile Option: OFF"
+    end
+end)
+
+--// Toggle Menu (- Key)
+uis.InputBegan:Connect(function(input, gpe)
+    if not gpe and input.KeyCode == Enum.KeyCode.Minus then
+        mainFrame.Visible = not mainFrame.Visible
+    end
+end)
+
+--// GET KEY FRAME
+local keyFrame = Instance.new("Frame", gui)
+keyFrame.Size = UDim2.new(0, 320, 0, 180)
+keyFrame.Position = UDim2.new(0.5, -160, 0.5, -90)
+keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+keyFrame.Active = true
+keyFrame.Draggable = true
+keyFrame.Visible = true
+
+local keyTitle = Instance.new("TextLabel", keyFrame)
+keyTitle.Size = UDim2.new(1, 0, 0, 30)
+keyTitle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+keyTitle.Text = "🔑 Kam GetKey"
+keyTitle.TextColor3 = Color3.new(1, 1, 1)
+keyTitle.Font = Enum.Font.GothamBold
+keyTitle.TextSize = 20
+
+local keyBox = Instance.new("TextBox", keyFrame)
+keyBox.Size = UDim2.new(1, -20, 0, 30)
+keyBox.Position = UDim2.new(0, 10, 0, 50)
+keyBox.PlaceholderText = "Enter Key..."
+keyBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+keyBox.TextColor3 = Color3.new(1, 1, 1)
+
+local getKeyBtn = Instance.new("TextButton", keyFrame)
+getKeyBtn.Size = UDim2.new(0.5, -15, 0, 30)
+getKeyBtn.Position = UDim2.new(0, 10, 0, 100)
+getKeyBtn.Text = "🌐 Get Key"
+getKeyBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+getKeyBtn.TextColor3 = Color3.new(1, 1, 1)
+
+local submitBtn = Instance.new("TextButton", keyFrame)
+submitBtn.Size = UDim2.new(0.5, -15, 0, 30)
+submitBtn.Position = UDim2.new(0.5, 5, 0, 100)
+submitBtn.Text = "✅ Submit"
+submitBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+submitBtn.TextColor3 = Color3.new(1, 1, 1)
+
+-- Get Key Link
+getKeyBtn.MouseButton1Click:Connect(function()
+    setclipboard(getKeyLink)
+    keyBox.Text = "📋 Link copied!"
+end)
+
+-- Key Validation
+submitBtn.MouseButton1Click:Connect(function()
+    if keyBox.Text == keyRequired then
+        keyBox.Text = "✅ Correct Key!"
+        keyFrame.Visible = false
+        mainFrame.Visible = true
+    else
+        keyBox.Text = "❌ Wrong Key!"
+    end
+end)
+
+-- Mobile Drag Support
+local dragging, dragInput, dragStart, startPos
+local function dragify(frame)
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    rs.RenderStepped:Connect(function()
+        if dragging and dragInput then
+            local delta = dragInput.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+end
+
+dragify(mainFrame)
+dragify(keyFrame)
